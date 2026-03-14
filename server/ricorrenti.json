@@ -1,0 +1,14 @@
+[
+  {
+    "id": "1773518637413",
+    "nome": "Finanziamento auto",
+    "importo": 353,
+    "tipo": "uscita",
+    "tipoRicorrenza": "Rata",
+    "categoria": "Trasporti",
+    "metodoPagamento": "Conto corrente",
+    "giornoMese": 20,
+    "attivo": true,
+    "note": ""
+  }
+]
