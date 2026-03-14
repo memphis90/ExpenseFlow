@@ -148,7 +148,7 @@ IF NOT EXIST "%ICO_PATH%" SET ICO_PATH=%SystemRoot%\system32\shell32.dll,13
 powershell -NoProfile -Command ^
   "$ws=New-Object -ComObject WScript.Shell;" ^
   "$s=$ws.CreateShortcut('%SHORTCUT%');" ^
-  "$s.TargetPath='%APP_DIR%\avvia-app.bat';" ^
+  "$s.TargetPath='%APP_DIR%\avvia-silente.vbs';" ^
   "$s.WorkingDirectory='%APP_DIR%';" ^
   "$s.IconLocation='%ICO_PATH%';" ^
   "$s.Description='Spese Tracker';" ^
@@ -167,7 +167,7 @@ SET SHORTCUT2=%STARTMENU%\Spese Tracker.lnk
 powershell -NoProfile -Command ^
   "$ws=New-Object -ComObject WScript.Shell;" ^
   "$s=$ws.CreateShortcut('%SHORTCUT2%');" ^
-  "$s.TargetPath='%APP_DIR%\avvia-app.bat';" ^
+  "$s.TargetPath='%APP_DIR%\avvia-silente.vbs';" ^
   "$s.WorkingDirectory='%APP_DIR%';" ^
   "$s.IconLocation='%ICO_PATH%';" ^
   "$s.Description='Spese Tracker';" ^

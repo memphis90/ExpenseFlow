@@ -151,7 +151,7 @@
                 <div class="tx-icon"><svg-icon :name="catIcon(s.categoria)" /></div>
                 <div class="tx-body">
                   <div class="tx-name">{{ s.descrizione }}</div>
-                  <div class="tx-sub">{{ s.categoria }} · {{ fmtDate(s.data) }}</div>
+                  <div class="tx-sub">{{ s.categoria }} · {{ fmtDate(s.data) }} · <span class="metodo-tag">{{ s.metodoPagamento || 'Contanti' }}</span></div>
                 </div>
                 <div class="tx-amt">−{{ s.importo.toFixed(2) }}</div>
               </div>
@@ -183,9 +183,13 @@
           </div>
         </div>
         <div class="page-inner">
-          <div class="tabs" style="margin-bottom:10px">
+          <div class="tabs" style="margin-bottom:6px">
             <button class="tab" :class="{ on: fCat==='' }" @click="fCat=''">Tutte</button>
             <button v-for="c in catsUsed" :key="c" class="tab" :class="{ on: fCat===c }" @click="fCat=c">{{ c }}</button>
+          </div>
+          <div class="tabs" style="margin-bottom:10px">
+            <button class="tab" :class="{ on: fMetodo==='' }" @click="fMetodo=''">Tutti i metodi</button>
+            <button v-for="m in metodiUsed" :key="m" class="tab" :class="{ on: fMetodo===m }" @click="fMetodo=m">{{ m }}</button>
           </div>
           <div v-if="filtrate.length" style="margin-bottom:8px;font-size:12px;color:var(--ink3)">
             {{ filtrate.length }} transazioni · Totale <span class="mono">€{{ totFiltrate }}</span>
@@ -269,7 +273,7 @@
               </div>
 
               <div class="section-label">Riepilogo mensile</div>
-              <div class="card">
+              <div class="card" style="margin-bottom:12px">
                 <div class="tx-list">
                   <div v-for="m in trend.slice().reverse().slice(0,6)" :key="m.key" class="tx-row" style="cursor:default">
                     <div class="tx-body">
@@ -277,6 +281,25 @@
                       <div class="tx-sub">{{ m.n }} transazioni</div>
                     </div>
                     <div class="mono" style="font-size:14px;color:var(--ink)">€{{ m.tot }}</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="section-label">Per metodo di pagamento</div>
+              <div class="card">
+                <div class="card-body">
+                  <div v-if="!perMetodo.length" class="empty" style="padding:16px 0">
+                    <div class="empty-sub">Nessun dato</div>
+                  </div>
+                  <div v-for="(r,i) in perMetodo" :key="r.nome" class="prog-item">
+                    <div class="prog-row">
+                      <span style="font-size:13px;font-weight:500">{{ r.nome }}</span>
+                      <span class="mono" style="font-size:13px">€{{ r.tot.toFixed(2) }}</span>
+                    </div>
+                    <div class="prog-bar-bg">
+                      <div class="prog-bar" :style="{ width: r.pct+'%', background: PALETTE[i % PALETTE.length] }"></div>
+                    </div>
+                    <div style="font-size:10px;color:var(--ink3)">{{ r.pct.toFixed(0) }}% · {{ r.n }} operazioni</div>
                   </div>
                 </div>
               </div>
@@ -364,6 +387,12 @@
               <svg-icon :name="c.icon" />
               <span>{{ c.nome }}</span>
             </button>
+          </div>
+        </div>
+        <div class="field" style="margin-bottom:16px">
+          <label>Metodo di pagamento</label>
+          <div class="metodo-grid">
+            <button v-for="m in METODI" :key="m" class="metodo-btn" :class="{ sel: form.metodoPagamento===m }" @click="form.metodoPagamento=m">{{ m }}</button>
           </div>
         </div>
         <div class="field">
@@ -456,6 +485,7 @@ const CATS = [
   { nome: 'Sport',      icon: 'dumbbell' },
   { nome: 'Altro',      icon: 'box'      },
 ]
+const METODI = ['Contanti', 'Carta Debito', 'Carta Credito', 'Bonifico', 'PayPal', 'Altro']
 const PALETTE = ['#2362e8','#15803d','#b45309','#d92b2b','#7c3aed','#0e7490','#be185d','#65a30d']
 const MESI = ['Gennaio','Febbraio','Marzo','Aprile','Maggio','Giugno','Luglio','Agosto','Settembre','Ottobre','Novembre','Dicembre']
 
@@ -476,7 +506,7 @@ const lineRef  = ref(null)
 let donutChart = null
 let lineChart  = null
 
-const form = reactive({ descrizione:'', importo:'', categoria:'Cibo', data:today(), note:'' })
+const form = reactive({ descrizione:'', importo:'', categoria:'Cibo', metodoPagamento:'Contanti', data:today(), note:'' })
 
 function today() { return new Date().toISOString().split('T')[0] }
 const now  = new Date()
@@ -527,17 +557,27 @@ const trend = computed(() => {
   return sorted.map(([k,r])=>{const[,mn]=k.split('-');return{key:k,lbl:MESI[parseInt(mn)-1].substring(0,3)+' '+k.split('-')[0],tot:r.tot.toFixed(0),n:r.n}})
 })
 
+// ── Per metodo pagamento (mese corrente) ──
+const perMetodo = computed(() => {
+  const base = statsMese.value ? spese.value.filter(s=>s.data.startsWith(statsMese.value)) : spese.value
+  const m={}; base.forEach(s=>{const k=s.metodoPagamento||'Contanti';if(!m[k])m[k]={tot:0,n:0};m[k].tot+=s.importo;m[k].n++})
+  const tot=Object.values(m).reduce((a,r)=>a+r.tot,0)||1
+  return Object.entries(m).sort((a,b)=>b[1].tot-a[1].tot).map(([nome,r])=>({nome,tot:r.tot,n:r.n,pct:(r.tot/tot)*100}))
+})
+
 // ── Filtri Transazioni ──
-const fMese = ref(''); const fCat = ref('')
+const fMese = ref(''); const fCat = ref(''); const fMetodo = ref('')
 const mesiList = computed(() => {
   const s=new Set(spese.value.map(s=>s.data.substring(0,7)))
   return [...s].sort().reverse().map(v=>{const[y,m]=v.split('-');return{v,l:MESI[parseInt(m)-1].substring(0,3)+' '+y}})
 })
-const catsUsed  = computed(() => [...new Set(spese.value.map(s=>s.categoria))])
+const catsUsed   = computed(() => [...new Set(spese.value.map(s=>s.categoria))])
+const metodiUsed = computed(() => [...new Set(spese.value.map(s=>s.metodoPagamento||'Contanti'))])
 const filtrate  = computed(() => {
   let l=[...spese.value]
-  if(fMese.value) l=l.filter(s=>s.data.startsWith(fMese.value))
-  if(fCat.value)  l=l.filter(s=>s.categoria===fCat.value)
+  if(fMese.value)   l=l.filter(s=>s.data.startsWith(fMese.value))
+  if(fCat.value)    l=l.filter(s=>s.categoria===fCat.value)
+  if(fMetodo.value) l=l.filter(s=>(s.metodoPagamento||'Contanti')===fMetodo.value)
   return l.sort((a,b)=>b.data.localeCompare(a.data))
 })
 const totFiltrate = computed(() => filtrate.value.reduce((a,s)=>a+s.importo,0).toFixed(2))
@@ -562,8 +602,8 @@ function go(p) { page.value=p; sideOpen.value=false }
 
 // ── Form ──
 const canSave = computed(() => form.importo>0 && form.categoria && form.data)
-function openNew() { editId.value=null; Object.assign(form,{descrizione:'',importo:'',categoria:'Cibo',data:today(),note:''}); sheetOpen.value=true }
-function openEdit(s) { editId.value=s.id; Object.assign(form,{descrizione:s.descrizione,importo:s.importo,categoria:s.categoria,data:s.data,note:s.note||''}); sheetOpen.value=true }
+function openNew() { editId.value=null; Object.assign(form,{descrizione:'',importo:'',categoria:'Cibo',metodoPagamento:'Contanti',data:today(),note:''}); sheetOpen.value=true }
+function openEdit(s) { editId.value=s.id; Object.assign(form,{descrizione:s.descrizione,importo:s.importo,categoria:s.categoria,metodoPagamento:s.metodoPagamento||'Contanti',data:s.data,note:s.note||''}); sheetOpen.value=true }
 function closeSheet() { sheetOpen.value=false; editId.value=null }
 
 // ── API ──
@@ -572,7 +612,7 @@ async function load() {
 }
 async function save() {
   if(!canSave.value) return
-  const body={descrizione:form.descrizione,importo:parseFloat(form.importo),categoria:form.categoria,data:form.data,note:form.note}
+  const body={descrizione:form.descrizione,importo:parseFloat(form.importo),categoria:form.categoria,metodoPagamento:form.metodoPagamento,data:form.data,note:form.note}
   try {
     if(editId.value) {
       const u=await fetch(`/api/spese/${editId.value}`,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)}).then(r=>r.json())
@@ -596,8 +636,8 @@ async function addCat() {
   toast('Categoria aggiunta'); newCat.value=''
 }
 function exportCSV() {
-  const rows=[['Data','Descrizione','Categoria','Importo','Note']]
-  spese.value.forEach(s=>rows.push([s.data,s.descrizione,s.categoria,s.importo.toFixed(2),s.note||'']))
+  const rows=[['Data','Descrizione','Categoria','Metodo','Importo','Note']]
+  spese.value.forEach(s=>rows.push([s.data,s.descrizione,s.categoria,s.metodoPagamento||'Contanti',s.importo.toFixed(2),s.note||'']))
   const a=Object.assign(document.createElement('a'),{href:URL.createObjectURL(new Blob([rows.map(r=>r.join(',')).join('\n')],{type:'text/csv'})),download:'spese.csv'})
   a.click(); toast('Export completato')
 }

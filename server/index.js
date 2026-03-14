@@ -133,6 +133,7 @@ app.post('/api/spese', (req, res) => {
     descrizione: req.body.descrizione || '',
     importo: parseFloat(req.body.importo) || 0,
     categoria: req.body.categoria || 'Altro',
+    metodoPagamento: req.body.metodoPagamento || 'Contanti',
     data: req.body.data || new Date().toISOString().split('T')[0],
     note: req.body.note || ''
   };
