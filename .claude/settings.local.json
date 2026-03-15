@@ -4,7 +4,8 @@
       "Bash(cd /Users/alessiocotroneo/Desktop/Projects/ExpenseFlow/client && npm run build 2>&1)",
       "Bash(cd /Users/alessiocotroneo/Desktop/Projects/ExpenseFlow/client && npx vite build 2>&1)",
       "Bash(cd /Users/alessiocotroneo/Desktop/Projects/ExpenseFlow/client && npm install 2>&1 | tail -5 && npm run build 2>&1)",
-      "Bash(npm run:*)"
+      "Bash(npm run:*)",
+      "Bash(npx vite:*)"
     ]
   }
 }

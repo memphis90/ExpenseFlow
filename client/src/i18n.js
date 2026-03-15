@@ -112,6 +112,7 @@ export const translations = {
     'config.openFolder': 'Apri cartella dati',
     'config.language': 'Lingua',
     'config.languageHint': "Cambia la lingua dell'app",
+    'config.switchProfile': 'Cambia profilo',
 
     // Sidebar
     'sidebar.activeProfile': 'Profilo attivo',
@@ -124,10 +125,14 @@ export const translations = {
     'sidebar.exit': "Esci dall'app",
 
     // Nav items
+    'nav.home': 'Dashboard',
+    'nav.transactions': 'Transazioni',
+    'nav.add': 'Aggiungi',
     'nav.statistics': 'Statistiche',
     'nav.recurring': 'Ricorrenti',
     'nav.categories': 'Categorie',
     'nav.methods': 'Metodi di pagamento',
+    'nav.settings': 'Impostazioni',
 
     // Sheet / modals
     'sheet.editRecurring': 'Modifica ricorrente',
@@ -306,6 +311,7 @@ export const translations = {
     'config.openFolder': 'Open data folder',
     'config.language': 'Language',
     'config.languageHint': 'Change the app language',
+    'config.switchProfile': 'Switch profile',
 
     // Sidebar
     'sidebar.activeProfile': 'Active profile',
@@ -318,10 +324,14 @@ export const translations = {
     'sidebar.exit': 'Exit app',
 
     // Nav items
+    'nav.home': 'Dashboard',
+    'nav.transactions': 'Transactions',
+    'nav.add': 'Add',
     'nav.statistics': 'Statistics',
     'nav.recurring': 'Recurring',
     'nav.categories': 'Categories',
     'nav.methods': 'Payment methods',
+    'nav.settings': 'Settings',
 
     // Sheet / modals
     'sheet.editRecurring': 'Edit recurring',

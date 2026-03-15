@@ -103,11 +103,69 @@
   <!-- ══ APP ══ -->
   <div v-else class="app-layout">
 
+    <!-- ══ NAV RAIL (desktop only) ══ -->
+    <div class="nav-col">
+      <div class="nr-logo-wrap">
+        <img :src="isDark ? '/logo.svg' : '/logo-light.svg'" class="nr-logo-img" alt="ExpenseFlow" />
+      </div>
+
+      <!-- Avatar → impostazioni, prima del menù -->
+      <button class="nr-btn nr-avatar-btn" :class="{on:page==='config'}" @click="go('config')" :title="currentProfile?.nome">
+        <div class="nf-circle" style="width:32px;height:32px;border-radius:9px;font-size:13px;font-weight:600;flex-shrink:0" :style="!currentProfile?.avatar ? { background: currentProfile?.colore||'#2362e8' } : {}">
+          <img v-if="currentProfile?.avatar" :src="currentProfile.avatar" :alt="currentProfile.nome" />
+          <span v-else>{{ currentProfile?.nome?.charAt(0).toUpperCase() }}</span>
+        </div>
+        <span class="nr-label">{{ currentProfile?.nome }}</span>
+      </button>
+
+    <nav class="nav-rail">
+      <div class="nr-divider"></div>
+      <button class="nr-btn" :class="{on:page==='home'}" @click="go('home')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12L12 3l9 9"/><path d="M9 21V12h6v9"/></svg>
+        <span class="nr-label">{{ t('nav.home') }}</span>
+      </button>
+      <button class="nr-btn" :class="{on:page==='spese'}" @click="go('spese')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><circle cx="3.5" cy="6" r="1"/><circle cx="3.5" cy="12" r="1"/><circle cx="3.5" cy="18" r="1"/></svg>
+        <span class="nr-label">{{ t('nav.transactions') }}</span>
+      </button>
+      <button class="nr-btn" :class="{on:page==='stats'}" @click="go('stats')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="12" width="4" height="9"/><rect x="10" y="7" width="4" height="14"/><rect x="17" y="3" width="4" height="18"/></svg>
+        <span class="nr-label">{{ t('nav.statistics') }}</span>
+      </button>
+      <div class="nr-divider"></div>
+      <button class="nr-add" @click="openNew">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        <span class="nr-label">{{ t('nav.add') }}</span>
+      </button>
+      <div class="nr-divider"></div>
+      <button class="nr-btn" :class="{on:page==='categorie'}" @click="go('categorie')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/><circle cx="7" cy="7" r="1.5" fill="currentColor"/></svg>
+        <span class="nr-label">{{ t('nav.categories') }}</span>
+      </button>
+      <button class="nr-btn" :class="{on:page==='metodi'}" @click="go('metodi')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+        <span class="nr-label">{{ t('nav.methods') }}</span>
+      </button>
+      <button class="nr-btn" :class="{on:page==='config'}" @click="go('config')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+        <span class="nr-label">{{ t('nav.settings') }}</span>
+      </button>
+    </nav>
+
+      <!-- Bottom: solo logout -->
+      <div class="nav-col-foot">
+        <button class="nr-btn nr-logout-btn" @click="quitOpen=true" :title="t('sidebar.exit')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+          <span class="nr-label">{{ t('sidebar.exit') }}</span>
+        </button>
+      </div>
+    </div><!-- /nav-col -->
+
     <!-- ══ MAIN ══ -->
     <main class="main-area">
 
-    <!-- ══ APP TOPBAR ══ -->
-    <div class="app-topbar">
+    <!-- ══ APP TOPBAR — solo mobile ══ -->
+    <div class="app-topbar" :class="{ scrolled: topbarScrolled }">
       <div class="topbar-logo">
         <img :src="isDark ? '/logo.svg' : '/logo-light.svg'" alt="ExpandeFlow" class="topbar-logo-img" />
       </div>
@@ -127,125 +185,146 @@
             <div class="display">{{ t('home.title') }}</div>
           </div>
 
-          <!-- ── Riepilogo mese ── -->
-          <div class="card" style="margin-bottom:10px">
-            <div class="card-body" style="padding:20px">
-              <!-- Saldo principale -->
-              <div style="margin-bottom:18px">
-                <div class="eyebrow" style="margin-bottom:6px">{{ t('home.balance') }} {{ meseNome }}</div>
-                <div class="mono" style="font-size:clamp(32px,6vw,44px);font-weight:300;letter-spacing:-.05em;line-height:1" :style="{ color: parseFloat(saldoMese)>=0 ? 'var(--green-kpi)' : 'var(--red-kpi)' }">{{ parseFloat(saldoMese)>=0 ? '+' : '' }}€{{ saldoMese }}</div>
-                <div style="display:flex;gap:14px;margin-top:6px">
-                  <div class="kpi-sub">{{ transazioniMese.length }} {{ t('home.transactions') }}</div>
-                  <div class="kpi-sub">· {{ t('home.avgDay', {n: mediaGiorno}) }}</div>
-                </div>
-              </div>
-              <!-- Uscite / Entrate -->
-              <div style="display:grid;grid-template-columns:1fr 1fr;gap:0;padding-top:16px;border-top:1px solid var(--bdr)">
-                <div style="padding-right:16px">
-                  <div class="eyebrow">{{ t('home.expenses') }}</div>
-                  <div class="mono" style="font-size:clamp(18px,3vw,24px);font-weight:300;letter-spacing:-.04em;color:var(--red-kpi);margin-top:4px;line-height:1">−€{{ totUscite }}</div>
-                </div>
-                <div style="padding-left:16px;border-left:1px solid var(--bdr);text-align:right">
-                  <div class="eyebrow">{{ t('home.income') }}</div>
-                  <div class="mono" style="font-size:clamp(18px,3vw,24px);font-weight:300;letter-spacing:-.04em;color:var(--green-kpi);margin-top:4px;line-height:1">+€{{ totEntrate }}</div>
-                </div>
-              </div>
-            </div>
-          </div>
+          <!-- ── Bento Grid ── -->
+          <div class="home-bento">
 
-          <!-- ── Due KPI ── -->
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px">
-            <div class="kpi-card" style="padding:13px 16px 14px">
-              <div style="display:flex;align-items:center;gap:7px;margin-bottom:6px">
-                <div style="width:26px;height:26px;border-radius:7px;background:var(--blue2);color:var(--blue);display:flex;align-items:center;justify-content:center;flex-shrink:0">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:13px;height:13px"><path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/><circle cx="7" cy="7" r="1.5" fill="currentColor"/></svg>
-                </div>
-                <div class="eyebrow">{{ t('home.topCategory') }}</div>
-              </div>
-              <div style="font-size:14px;font-weight:500">{{ catTop.nome || '—' }}</div>
-              <div class="kpi-sub" v-if="catTop.tot">€{{ catTop.tot }}</div>
-            </div>
-            <div class="kpi-card" style="padding:13px 16px 14px">
-              <div style="display:flex;align-items:center;gap:7px;margin-bottom:6px">
-                <div style="width:26px;height:26px;border-radius:7px;background:rgba(217,43,43,0.1);color:var(--red-kpi);display:flex;align-items:center;justify-content:center;flex-shrink:0">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:13px;height:13px"><polyline points="23 18 13.5 8.5 8.5 13.5 1 6"/><polyline points="17 18 23 18 23 12"/></svg>
-                </div>
-                <div class="eyebrow">{{ t('home.maxExpense') }}</div>
-              </div>
-              <div class="mono" style="font-size:17px;font-weight:300;letter-spacing:-.03em">€{{ uscitaMax.importo?.toFixed(2) || '0.00' }}</div>
-              <div class="kpi-sub" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ uscitaMax.descrizione || '—' }}</div>
-            </div>
-          </div>
+            <!-- LEFT: balance + bar chart + recent -->
+            <div class="bento-main">
 
-          <!-- Grafico a barre 7 giorni (solo uscite) -->
-          <div class="section-label">{{ t('home.last7days') }}</div>
-          <div class="card" style="margin-bottom:12px">
-            <div class="card-body">
-              <div class="row" style="margin-bottom:14px">
-                <span style="font-size:13px;font-weight:500">{{ t('home.expensesByDay') }}</span>
-                <span class="mono" style="font-size:12px;color:var(--ink3)">€{{ tot7g }}</span>
-              </div>
-              <div class="bar-chart" style="height:90px">
-                <div v-for="g in week" :key="g.lbl" class="bar-col">
-                  <div class="bar-track" style="height:100%">
-                    <div class="bar-fill" :class="{ today: g.isToday, hi: g.isMax }" :style="{ height: g.pct+'%' }"></div>
+              <!-- Riepilogo mese -->
+              <div class="card" style="margin-bottom:10px">
+                <div class="card-body" style="padding:20px">
+                  <!-- Saldo principale -->
+                  <div style="margin-bottom:18px">
+                    <div class="eyebrow" style="margin-bottom:6px">{{ t('home.balance') }} {{ meseNome }}</div>
+                    <div class="mono balance-value" style="font-size:clamp(32px,6vw,44px);font-weight:300;letter-spacing:-.05em;line-height:1" :class="parseFloat(saldoMese)>=0 ? 'balance-pos' : 'balance-neg'" :style="{ color: parseFloat(saldoMese)>=0 ? 'var(--green-kpi)' : 'var(--red-kpi)' }">{{ parseFloat(saldoMese)>=0 ? '+' : '' }}€{{ saldoMese }}</div>
+                    <div style="display:flex;gap:14px;margin-top:6px">
+                      <div class="kpi-sub">{{ transazioniMese.length }} {{ t('home.transactions') }}</div>
+                      <div class="kpi-sub">· {{ t('home.avgDay', {n: mediaGiorno}) }}</div>
+                    </div>
                   </div>
-                  <div class="bar-lbl">{{ g.lbl }}</div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Grafico donut -->
-          <div class="section-label">{{ t('home.monthlyDistribution') }}</div>
-          <div class="card" style="margin-bottom:12px">
-            <div class="card-body">
-              <div v-if="!usciteMese.length" class="empty" style="padding:20px 0">
-                <div class="empty-sub">{{ t('home.noExpensesMonth') }}</div>
-              </div>
-              <div v-else style="display:flex;align-items:center;gap:24px;flex-wrap:wrap">
-                <div class="chart-wrap" style="width:160px;height:160px;flex-shrink:0">
-                  <canvas ref="donutRef" width="160" height="160"></canvas>
-                </div>
-                <div style="flex:1;min-width:140px">
-                  <div v-for="(r,i) in perCat.slice(0,5)" :key="r.nome" style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
-                    <div style="width:8px;height:8px;border-radius:50%;flex-shrink:0" :style="{ background: PALETTE[i % PALETTE.length] }"></div>
-                    <span style="font-size:13px;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ r.nome }}</span>
-                    <span class="mono" style="font-size:12px;color:var(--ink2)">{{ r.pct.toFixed(0) }}%</span>
+                  <!-- Uscite / Entrate -->
+                  <div style="display:grid;grid-template-columns:1fr 1fr;gap:0;padding-top:16px;border-top:1px solid var(--bdr)">
+                    <div style="padding-right:16px">
+                      <div class="eyebrow">{{ t('home.expenses') }}</div>
+                      <div style="display:flex;align-items:baseline;gap:8px;flex-wrap:wrap">
+                        <div class="mono" style="font-size:clamp(18px,3vw,24px);font-weight:300;letter-spacing:-.04em;color:var(--red-kpi);margin-top:4px;line-height:1">−€{{ totUscite }}</div>
+                        <span v-if="trendUscite" class="trend-chip" :class="parseFloat(trendUscite)>0 ? 'trend-up' : 'trend-dn'">{{ parseFloat(trendUscite)>0 ? '↑' : '↓' }}{{ Math.abs(parseFloat(trendUscite)) }}%</span>
+                      </div>
+                    </div>
+                    <div style="padding-left:16px;border-left:1px solid var(--bdr);text-align:right">
+                      <div class="eyebrow">{{ t('home.income') }}</div>
+                      <div style="display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;justify-content:flex-end">
+                        <span v-if="trendEntrate" class="trend-chip" :class="parseFloat(trendEntrate)>0 ? 'trend-in-up' : 'trend-in-dn'">{{ parseFloat(trendEntrate)>0 ? '↑' : '↓' }}{{ Math.abs(parseFloat(trendEntrate)) }}%</span>
+                        <div class="mono" style="font-size:clamp(18px,3vw,24px);font-weight:300;letter-spacing:-.04em;color:var(--green-kpi);margin-top:4px;line-height:1">+€{{ totEntrate }}</div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          </div>
 
-          <!-- Recenti -->
-          <div class="row" style="margin-bottom:8px">
-            <span class="section-label" style="margin:0">{{ t('home.recent') }}</span>
-            <button @click="go('spese')" style="font-size:12px;font-weight:500;color:var(--blue);background:none;border:none;cursor:pointer;font-family:inherit">{{ t('home.viewAll') }}</button>
-          </div>
-          <div class="card" v-if="ultimi.length">
-            <div class="tx-list">
-              <div v-for="s in ultimi" :key="s.id" class="tx-row" @click="openEdit(s)">
-                <div class="tx-icon" :class="{ 'tx-icon-in': s.tipo==='entrata' }"
-                  v-html="s.tipo==='entrata' ? `<svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round' style='width:15px;height:15px'><line x1='12' y1='19' x2='12' y2='5'/><polyline points='5 12 12 5 19 12'/></svg>` : catIconSvg(s.categoria)">
-                </div>
-                <div class="tx-body">
-                  <div class="tx-name">{{ s.descrizione || (s.tipo==='entrata' ? t('tx.income') : t('sheet.expense')) }}</div>
-                  <div class="tx-sub">{{ s.tipo==='entrata' ? t('tx.income') : s.categoria }} · {{ fmtDate(s.data) }}</div>
-                </div>
-                <div class="tx-amt" :class="{ 'tx-amt-in': s.tipo==='entrata' }">
-                  {{ s.tipo==='entrata' ? '+' : '−' }}{{ s.importo.toFixed(2) }}
+              <!-- Bar chart 7 giorni -->
+              <div class="section-label">{{ t('home.last7days') }}</div>
+              <div class="card" style="margin-bottom:12px">
+                <div class="card-body">
+                  <div class="row" style="margin-bottom:14px">
+                    <span style="font-size:13px;font-weight:500">{{ t('home.expensesByDay') }}</span>
+                    <span class="mono" style="font-size:12px;color:var(--ink3)">€{{ tot7g }}</span>
+                  </div>
+                  <div class="bar-chart" style="height:90px">
+                    <div v-for="g in week" :key="g.lbl" class="bar-col">
+                      <div class="bar-track" style="height:100%">
+                        <div class="bar-fill" :class="{ today: g.isToday, hi: g.isMax }" :style="{ height: g.pct+'%' }"></div>
+                      </div>
+                      <div class="bar-lbl">{{ g.lbl }}</div>
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
-          </div>
-          <div class="card" v-else>
-            <div class="empty">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
-              <div class="empty-title">{{ t('home.noTransactions') }}</div>
-              <div class="empty-sub">{{ t('home.pressPlus') }}</div>
-            </div>
-          </div>
+
+              <!-- Recenti -->
+              <div class="row" style="margin-bottom:8px">
+                <span class="section-label" style="margin:0">{{ t('home.recent') }}</span>
+                <button @click="go('spese')" style="font-size:12px;font-weight:500;color:var(--blue);background:none;border:none;cursor:pointer;font-family:inherit">{{ t('home.viewAll') }}</button>
+              </div>
+              <div class="card" v-if="ultimi.length">
+                <div class="tx-list">
+                  <div v-for="s in ultimi" :key="s.id" class="tx-row" @click="openEdit(s)">
+                    <div class="tx-icon" :class="{ 'tx-icon-in': s.tipo==='entrata' }"
+                      v-html="s.tipo==='entrata' ? `<svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round' style='width:15px;height:15px'><line x1='12' y1='19' x2='12' y2='5'/><polyline points='5 12 12 5 19 12'/></svg>` : catIconSvg(s.categoria)">
+                    </div>
+                    <div class="tx-body">
+                      <div class="tx-name">{{ s.descrizione || (s.tipo==='entrata' ? t('tx.income') : t('sheet.expense')) }}</div>
+                      <div class="tx-sub">{{ s.tipo==='entrata' ? t('tx.income') : s.categoria }} · {{ fmtDate(s.data) }}</div>
+                    </div>
+                    <div class="tx-amt" :class="{ 'tx-amt-in': s.tipo==='entrata' }">
+                      {{ s.tipo==='entrata' ? '+' : '−' }}{{ s.importo.toFixed(2) }}
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="card" v-else>
+                <div class="empty">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+                  <div class="empty-title">{{ t('home.noTransactions') }}</div>
+                  <div class="empty-sub">{{ t('home.pressPlus') }}</div>
+                </div>
+              </div>
+
+            </div><!-- /bento-main -->
+
+            <!-- RIGHT: KPI cards + donut chart -->
+            <div class="bento-side">
+
+              <!-- Due KPI -->
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+                <div class="kpi-card" style="padding:13px 16px 14px">
+                  <div style="display:flex;align-items:center;gap:7px;margin-bottom:6px">
+                    <div style="width:26px;height:26px;border-radius:7px;background:var(--blue2);color:var(--blue);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:13px;height:13px"><path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/><circle cx="7" cy="7" r="1.5" fill="currentColor"/></svg>
+                    </div>
+                    <div class="eyebrow">{{ t('home.topCategory') }}</div>
+                  </div>
+                  <div style="font-size:14px;font-weight:500">{{ catTop.nome || '—' }}</div>
+                  <div class="kpi-sub" v-if="catTop.tot">€{{ catTop.tot }}</div>
+                </div>
+                <div class="kpi-card" style="padding:13px 16px 14px">
+                  <div style="display:flex;align-items:center;gap:7px;margin-bottom:6px">
+                    <div style="width:26px;height:26px;border-radius:7px;background:rgba(217,43,43,0.1);color:var(--red-kpi);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:13px;height:13px"><polyline points="23 18 13.5 8.5 8.5 13.5 1 6"/><polyline points="17 18 23 18 23 12"/></svg>
+                    </div>
+                    <div class="eyebrow">{{ t('home.maxExpense') }}</div>
+                  </div>
+                  <div class="mono" style="font-size:17px;font-weight:300;letter-spacing:-.03em">€{{ uscitaMax.importo?.toFixed(2) || '0.00' }}</div>
+                  <div class="kpi-sub" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ uscitaMax.descrizione || '—' }}</div>
+                </div>
+              </div>
+
+              <!-- Donut chart -->
+              <div class="section-label" style="margin-bottom:0">{{ t('home.monthlyDistribution') }}</div>
+              <div class="card">
+                <div class="card-body">
+                  <div v-if="!usciteMese.length" class="empty" style="padding:20px 0">
+                    <div class="empty-sub">{{ t('home.noExpensesMonth') }}</div>
+                  </div>
+                  <div v-else style="display:flex;align-items:center;gap:24px;flex-wrap:wrap">
+                    <div class="chart-wrap" style="width:160px;height:160px;flex-shrink:0">
+                      <canvas ref="donutRef" width="160" height="160"></canvas>
+                    </div>
+                    <div style="flex:1;min-width:140px">
+                      <div v-for="(r,i) in perCat.slice(0,5)" :key="r.nome" style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+                        <div style="width:8px;height:8px;border-radius:50%;flex-shrink:0" :style="{ background: PALETTE[i % PALETTE.length] }"></div>
+                        <span style="font-size:13px;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ r.nome }}</span>
+                        <span class="mono" style="font-size:12px;color:var(--ink2)">{{ r.pct.toFixed(0) }}%</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div><!-- /bento-side -->
+
+          </div><!-- /home-bento -->
         </div>
       </div>
 
@@ -571,7 +650,10 @@
                 <div style="font-size:14px;font-weight:500">{{ currentProfile?.nome }}</div>
                 <div class="kpi-sub">{{ t('config.activeSession') }}</div>
               </div>
-              <button @click="openEditProfile()" style="font-size:12px;padding:6px 14px;border-radius:8px;border:1px solid var(--bdr2);color:var(--ink2);background:none;cursor:pointer;font-family:inherit;font-weight:500">{{ t('config.edit') }}</button>
+              <div style="display:flex;flex-direction:column;gap:6px;align-items:flex-end">
+                <button @click="openEditProfile()" style="font-size:12px;padding:6px 14px;border-radius:8px;border:1px solid var(--bdr2);color:var(--ink2);background:none;cursor:pointer;font-family:inherit;font-weight:500">{{ t('config.edit') }}</button>
+                <button @click="logout()" style="font-size:12px;padding:6px 14px;border-radius:8px;border:1px solid var(--bdr2);color:var(--blue);background:none;cursor:pointer;font-family:inherit;font-weight:500">{{ t('config.switchProfile') }}</button>
+              </div>
             </div>
           </div>
 
@@ -1175,7 +1257,8 @@ function toggleTheme() { isDark.value = !isDark.value; localStorage.setItem('the
 
 // ── State ──
 const page      = ref('home')
-const sideOpen  = ref(false)
+const sideOpen       = ref(false)
+const topbarScrolled = ref(false)
 const sheetOpen = ref(false)
 const editId    = ref(null)
 const toastTxt  = ref('')
@@ -1208,6 +1291,16 @@ const entrateMese     = computed(() => transazioniMese.value.filter(s=>s.tipo===
 const totUscite       = computed(() => usciteMese.value.reduce((a,s)=>a+s.importo,0).toFixed(2))
 const totEntrate      = computed(() => entrateMese.value.reduce((a,s)=>a+s.importo,0).toFixed(2))
 const saldoMese       = computed(() => (parseFloat(totEntrate.value)-parseFloat(totUscite.value)).toFixed(2))
+
+// ── Trend vs mese precedente ──
+const prevMeseKey = (() => {
+  const d = new Date(anno, now.getMonth()-1, 1)
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`
+})()
+const prevTotUscite   = computed(() => spese.value.filter(s=>s.data.startsWith(prevMeseKey)&&s.tipo!=='entrata').reduce((a,s)=>a+s.importo,0))
+const prevTotEntrate  = computed(() => spese.value.filter(s=>s.data.startsWith(prevMeseKey)&&s.tipo==='entrata').reduce((a,s)=>a+s.importo,0))
+const trendUscite     = computed(() => { const p=prevTotUscite.value, c=parseFloat(totUscite.value); return p>0 ? ((c-p)/p*100).toFixed(1) : null })
+const trendEntrate    = computed(() => { const p=prevTotEntrate.value, c=parseFloat(totEntrate.value); return p>0 ? ((c-p)/p*100).toFixed(1) : null })
 const ultimi          = computed(() => [...transazioniMese.value].sort((a,b)=>b.data.localeCompare(a.data)).slice(0,6))
 const mediaGiorno     = computed(() => (parseFloat(totUscite.value)/giorniMese).toFixed(2))
 const catTop          = computed(() => {
@@ -1543,6 +1636,7 @@ watch(()=>statsMese.value, async()=>{ await nextTick(); renderLine() })
 
 onMounted(async()=>{
   applyTheme()
+  window.addEventListener('scroll', () => { topbarScrolled.value = window.scrollY > 20 }, { passive: true })
   // Carica sempre avatarList (usata anche nel picker impostazioni in futuro)
   try { avatarList.value = await (await fetch('/avatars.json')).json() } catch {}
   if (checkSession()) {
