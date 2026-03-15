@@ -1,0 +1,22 @@
+[
+  {"id":"av01","url":"https://api.dicebear.com/7.x/adventurer/svg?seed=Felix&backgroundColor=b6e3f4"},
+  {"id":"av02","url":"https://api.dicebear.com/7.x/adventurer/svg?seed=Luna&backgroundColor=ffd5dc"},
+  {"id":"av03","url":"https://api.dicebear.com/7.x/adventurer/svg?seed=Max&backgroundColor=d1fae5"},
+  {"id":"av04","url":"https://api.dicebear.com/7.x/adventurer/svg?seed=Bella&backgroundColor=fef3c7"},
+  {"id":"av05","url":"https://api.dicebear.com/7.x/adventurer/svg?seed=Charlie&backgroundColor=c0aede"},
+  {"id":"av06","url":"https://api.dicebear.com/7.x/adventurer/svg?seed=Daisy&backgroundColor=fecaca"},
+  {"id":"av07","url":"https://api.dicebear.com/7.x/adventurer/svg?seed=Oscar&backgroundColor=a7f3d0"},
+  {"id":"av08","url":"https://api.dicebear.com/7.x/adventurer/svg?seed=Lily&backgroundColor=ddd6fe"},
+  {"id":"av09","url":"https://api.dicebear.com/7.x/adventurer/svg?seed=Milo&backgroundColor=fde68a"},
+  {"id":"av10","url":"https://api.dicebear.com/7.x/adventurer/svg?seed=Sophie&backgroundColor=fbcfe8"},
+  {"id":"av11","url":"https://api.dicebear.com/7.x/adventurer/svg?seed=Jasper&backgroundColor=bae6fd"},
+  {"id":"av12","url":"https://api.dicebear.com/7.x/adventurer/svg?seed=Molly&backgroundColor=bbf7d0"},
+  {"id":"av13","url":"https://api.dicebear.com/7.x/adventurer/svg?seed=Oliver&backgroundColor=fed7aa"},
+  {"id":"av14","url":"https://api.dicebear.com/7.x/adventurer/svg?seed=Coco&backgroundColor=fecdd3"},
+  {"id":"av15","url":"https://api.dicebear.com/7.x/adventurer/svg?seed=Leo&backgroundColor=e9d5ff"},
+  {"id":"av16","url":"https://api.dicebear.com/7.x/adventurer/svg?seed=Zoe&backgroundColor=bfdbfe"},
+  {"id":"av17","url":"https://api.dicebear.com/7.x/adventurer/svg?seed=Ruby&backgroundColor=fde047"},
+  {"id":"av18","url":"https://api.dicebear.com/7.x/adventurer/svg?seed=Buddy&backgroundColor=86efac"},
+  {"id":"av19","url":"https://api.dicebear.com/7.x/adventurer/svg?seed=Nala&backgroundColor=f9a8d4"},
+  {"id":"av20","url":"https://api.dicebear.com/7.x/adventurer/svg?seed=Simba&backgroundColor=93c5fd"}
+]
